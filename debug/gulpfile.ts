@@ -1,6 +1,5 @@
 let gulp = require('gulp')
-import {handlelines} from '../src/plugin'
-export { handlelines, TransformCallback } from '../src/plugin';
+import {runXml2js} from '../src/plugin'
 import * as loglevel from 'loglevel'
 const log = loglevel.getLogger('gulpfile')
 log.setLevel((process.env.DEBUG_LEVEL || 'warn') as log.LogLevelDesc)
@@ -18,23 +17,7 @@ const PLUGIN_NAME = module.exports.name;
 //pluginLog.setLevel('debug')
 
 
-// allCaps makes sure all string properties on the top level of lineObj have values that are all caps
-const allCaps = (lineObj: object): object => {
-  log.debug(lineObj)
-  for (let propName in lineObj) {
-    let obj = (<any>lineObj)
-    if (typeof (obj[propName]) == "string")
-      obj[propName] = obj[propName].toUpperCase()
-  }
-  
-  // for testing: cause an error
-  // let err; 
-  // let zz = (err as any).nothing;
-
-  return lineObj
-}
-
-
+/*
 function demonstrateHandlelines(callback: any) {
   log.info('gulp starting for ' + PLUGIN_NAME)
   return gulp.src('../testdata/*.ndjson',{buffer:false})
@@ -60,12 +43,18 @@ function demonstrateHandlelines(callback: any) {
         callback()
       })
     }
+*/
 
+    export function xml () {
+      gulp.src('../testdata/normal.xml')
+        .pipe(runXml2js())
+        .pipe(gulp.dest('../testdata/processed'));
+    };
+    
+    export function nested () {
+      gulp.src('../testdata/nested.xml')
+        .pipe(runXml2js())
+        .pipe(gulp.dest('../testdata/processed'));
+    };    
 
-
-    function test(callback: any) {
-      log.info('This seems to run only after a successful run of demonstrateHandlelines! Do deletions here?')
-      callback()
-    }
-
-exports.default = gulp.series(demonstrateHandlelines, test)
+exports.default = xml
