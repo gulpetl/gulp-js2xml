@@ -1,4 +1,6 @@
-# gulp-etl-handlelines #
+# gulp-json2xml #
+
+*gulp-json2xml is being created from **[gulp-etl-handlelines](https://github.com/gulpetl/gulp-etl-handlelines)** and [gulp-xml2js](https://github.com/stevelacy/gulp-xml2js). The original **gulp-etl-handlelines** readme is below.
 
 Utility function providing a "handleline" callback which is called for every record in a **gulp-etl** **Message Stream**. This very powerful functionality can be used for filtering, transformations, counters, etc. and is a nice way to add functionality without building a full module. It also powers a number of our other modules, greatly simplifying their development by handling the "boilerplate" code needed for a module. Works in both buffer and streaming mode.
 
