@@ -46,13 +46,13 @@ function demonstrateHandlelines(callback: any) {
 */
 
     export function xml () {
-      gulp.src('../testdata/normal.xml')
+      gulp.src('../testdata/normal.json')
         .pipe(runXml2js())
         .pipe(gulp.dest('../testdata/processed'));
     };
     
     export function nested () {
-      gulp.src('../testdata/nested.xml')
+      gulp.src('../testdata/nested.json')
         .pipe(runXml2js())
         .pipe(gulp.dest('../testdata/processed'));
     };    
