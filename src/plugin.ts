@@ -1,7 +1,12 @@
 var map = require('map-stream');
 var rext = require('replace-ext');
-var xml2js = require('xml2js').parseString;
+//var xml2js = require('xml2js');
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+
 import Vinyl = require('vinyl')
+
 
 export function runXml2js(options?: any) {
   var options = options ? options : {};
@@ -14,9 +19,12 @@ export function runXml2js(options?: any) {
     let fileBuf : Buffer = (file.contents as Buffer)
     xml2js(fileBuf.toString('utf8'), options, function(err:any, result:any) {
       if (err) cb(new Error(err));
-      file.contents = new Buffer(JSON.stringify(result));
+      var builder = new xml2js.Builder();
+      var xml = builder.buildObject(result)
+      file.contents = new Buffer(xml);
       file.path = rext(file.path, '.js');
     });
+    
     cb(null, file);
   }
 
