@@ -46,15 +46,15 @@ function demonstrateHandlelines(callback: any) {
 */
 
     export function xml () {
-      gulp.src('../testdata/normal.json')
+      gulp.src('../testdata/*.json')
         .pipe(runXml2js())
         .pipe(gulp.dest('../testdata/processed'));
     };
     
-    export function nested () {
+/*    export function nested () {
       gulp.src('../testdata/nested.json')
         .pipe(runXml2js())
         .pipe(gulp.dest('../testdata/processed'));
-    };    
+    };    */
 
 exports.default = xml
