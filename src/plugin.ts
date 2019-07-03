@@ -12,25 +12,21 @@ export function runXml2js(options?: any) {
 
   function modifyContents(file: Vinyl, cb:Function) {
     
-    if (file.isNull()) return cb(null, file);
+    if (file.isNull()) return cb(null, file); 
     if (file.isStream()) return cb(new Error("gulp-xml2js: Streaming not supported")); // pass error if streaming is not supported
     let returnErr: any = null
-   // let fileBuf : Buffer = (file.contents as Buffer)
-  /*  xml2js(fileBuf.toString('utf8'), options, function(err:any, result:any) {
-      if (err) cb(new Error(err));
-      file.contents = new Buffer(JSON.stringify(result));
-      file.path = rext(file.path, '.js');
-    });*/
+
+    //Will parse the JSON into XML if the file is in buffer mode
     if (file.isBuffer()){
       let fileBuf : Buffer = (file.contents as Buffer)
       let resultHolder: any
+      let lineObj: any
       let xmlResult:any
       var builder = new xml2js.Builder();
-      // we'll call handleLine on each line
         try {
           resultHolder = fileBuf.toString('utf8')
-          xmlResult = builder.buildObject(resultHolder)
-          
+          lineObj = JSON.parse(resultHolder)
+          xmlResult = builder.buildObject(lineObj)        
     }catch(err){
       returnErr = new PluginError(PLUGIN_NAME, err);
     }

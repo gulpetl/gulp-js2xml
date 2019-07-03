@@ -1,7 +1,7 @@
 {
-  "name": "gulp-etl-handlelines",
+  "name": "gulp-json2xml",
   "version": "1.0.3",
-  "repository": "https://github.com/gulpetl/gulp-etl-handlelines",
+  "repository": "https://github.com/gulpetl/gulp-json2xml",
   "description": "Utility gulp-etl plugin",
   "main": "dist/js/plugin.js",
   "typings": "dist/types/plugin.d.ts",
@@ -13,6 +13,7 @@
     "test": "jest"
   },
   "author": "peterl@sbcotton.com",
+  "contributors": ["Manoj Khatri"],
   "license": "MIT",
   "keywords": [
     "gulpplugin",
