@@ -16,7 +16,7 @@ export function runXml2js(options?: any) {
     if (file.isStream()) return cb(new Error("gulp-xml2js: Streaming not supported")); // pass error if streaming is not supported
     let returnErr: any = null
 
-    //Will parse the JSON into XML if the file is in buffer mode
+    //Will parse the JSON into XML if the file is in
     if (file.isBuffer()){
       let fileBuf : Buffer = (file.contents as Buffer)
       let resultHolder: any
@@ -26,7 +26,9 @@ export function runXml2js(options?: any) {
         try {
           resultHolder = fileBuf.toString('utf8')
           lineObj = JSON.parse(resultHolder)
-          xmlResult = builder.buildObject(lineObj)        
+          xmlResult = builder.buildObject(lineObj)
+          
+          
     }catch(err){
       returnErr = new PluginError(PLUGIN_NAME, err);
     }

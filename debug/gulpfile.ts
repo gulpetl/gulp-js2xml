@@ -1,6 +1,7 @@
 let gulp = require('gulp')
 import {runXml2js} from '../src/plugin'
 import * as loglevel from 'loglevel'
+import { strict } from 'assert';
 const log = loglevel.getLogger('gulpfile')
 log.setLevel((process.env.DEBUG_LEVEL || 'warn') as log.LogLevelDesc)
 

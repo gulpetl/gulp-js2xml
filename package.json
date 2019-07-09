@@ -13,7 +13,9 @@
     "test": "jest"
   },
   "author": "peterl@sbcotton.com",
-  "contributors": ["Manoj Khatri"],
+  "contributors": [
+    "Manoj Khatri"
+  ],
   "license": "MIT",
   "keywords": [
     "gulpplugin",
@@ -31,6 +33,7 @@
     "split2": "^3.1.1",
     "through2": "^3.0.1",
     "vinyl": "^2.2.0",
+    "xml-js": "^1.6.11",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
