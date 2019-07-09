@@ -1,78 +1,50 @@
 # gulp-json2xml #
-
-*gulp-json2xml is being created from **[gulp-etl-handlelines](https://github.com/gulpetl/gulp-etl-handlelines)** and [gulp-xml2js](https://github.com/stevelacy/gulp-xml2js). The original **gulp-etl-handlelines** readme is below.
-
-Utility function providing a "handleline" callback which is called for every record in a **gulp-etl** **Message Stream**. This very powerful functionality can be used for filtering, transformations, counters, etc. and is a nice way to add functionality without building a full module. It also powers a number of our other modules, greatly simplifying their development by handling the "boilerplate" code needed for a module. Works in both buffer and streaming mode.
-
-This is a **[gulp-etl](https://gulpetl.com/)** plugin, and as such it is a [gulp](https://gulpjs.com/) plugin. **data-etl** plugins processes [ndjson](http://ndjson.org/) data streams/files which we call **Message Streams** and which are compliant with the [Singer specification](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#output). Message Streams look like this:
+The goal of this plugin is to take a JSON file and convert it to XML. The JSON files are passed through gulp.src in the gulpfile
+A sample JSON file looks like this 
+[{"carModel":"Audi","price":10000,"color":"blue"},{"carModel":"BMW","price":15000,"color":"red"},{"carModel":"Mercedes","price":20000,"color":"yellow"},{"carModel":"Porsche","price":30000,"color":"green"}]
 
 ```
-{"type": "SCHEMA", "stream": "users", "key_properties": ["id"], "schema": {"required": ["id"], "type": "object", "properties": {"id": {"type": "integer"}}}}
-{"type": "RECORD", "stream": "users", "record": {"id": 1, "name": "Chris"}}
-{"type": "RECORD", "stream": "users", "record": {"id": 2, "name": "Mike"}}
-{"type": "SCHEMA", "stream": "locations", "key_properties": ["id"], "schema": {"required": ["id"], "type": "object", "properties": {"id": {"type": "integer"}}}}
-{"type": "RECORD", "stream": "locations", "record": {"id": 1, "name": "Philadelphia"}}
-{"type": "STATE", "value": {"users": 2, "locations": 1}}
+This plugin takes in both compact and non compact JSON files and the user can specify whether or not the file is in compact format by setting 'compact:true' or 'compact:false' in the options parameter. 
+
+The basic difference between a compact and a non compact JSON is that xml tag <a/> can be resultant of compact input like {"a":{}} or a non-compact output like {"elements":[{"type":"element","name":"a"}]}.
 ```
 
 ### Usage
-**data-etl** plugins accept a configObj as its first parameter. The configObj
-will contain any info the plugin needs.
+**data-etl**
+--plugin accept a configObj as its first parameter. The configObj will contain any info the plugin needs.
 
-In addition, this plugin also accepts a TransformCallback function. That function will receive a 
-Singer message object (a [RECORD](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#record-message), [SCHEMA](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#schema-message) or [STATE](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message)) and is expected to return either the Singer message object (whether transformed or unchanged) to be passed downstream, or ```null``` to remove the message from the stream).
 
-This plugin also accepts a FinishCallback and StartCallback, which are functions that are executed before and after the TransformCallback. The FinishCallback can be used to manage data stored collected from the stream. 
-
-Send in callbacks as a second parameter in the form: 
-
+In addition the plugin also allows the user to set different options in the options variable. Following is the table of options users can set
 ```
-{
-    transformCallback: tranformFunction,
-    finishCallback: finishFunction,
-    startCallback: startFunction
-}
+Option          	|Default	       | Description
+spaces	                |0               | Number of spaces to be used for indenting XML output. Passing characters like ' ' or '\t' are also accepted.
+compact		        |false             | Whether the input object is in compact form or not. By default, input is expected to be in non-compact form.
+                                       | IMPORTANT: Remeber to set this option compact: true if you are supplying normal json (which is likely equivalent to compact form). Otherwise, the function assumes your json input is non-compact form and you will not get a result if it is not in that form. See Synopsis to know the difference between the two json forms
+fullTagEmptyElement	|false	          | Whether to produce element without sub-elements as full tag pairs <a></a> rather than self closing tag <a/>.
+indentCdata	false	                  | Whether to write CData in a new line and indent it. Will generate <a>\n <![CDATA[foo]]></a> instead of <a><![CDATA[foo]]></a>.      
+indentAttributes	|false	          | Whether to print attributes across multiple lines and indent them (when spaces is not 0). See example.
+ignoreDeclaration	|false	          | Whether to ignore writing declaration directives of xml. For example, <?xml?> will be ignored.
+ignoreInstruction	|false	          | Whether to ignore writing processing instruction of xml. For example, <?go there?> will be ignored.
+ignoreAttributes	|false	          | Whether to ignore writing attributes of the elements. For example, x="1" in <a x="1"></a> will be ignored
+ignoreComment	        |false	          | Whether to ignore writing comments of the elements. That is, no <!-- --> will be generated.
+ignoreCdata             |false	          | Whether to ignore writing CData of the elements. That is, no <![CDATA[ ]]> will be generated.
+ignoreDoctype	        |false	          | Whether to ignore writing Doctype of the elements. That is, no <!DOCTYPE > will be generated.
+ignoreText	        |false	          | Whether to ignore writing texts of the elements. For example, hi text in <a>hi</a> will be ignored.
+```
 ```
 
 ##### Sample gulpfile.js
 ```
-var handleLines = require('gulp-etl-handlelines').handlelines
-// for TypeScript use this line instead:
-// import { handlinelines } from 'gulp-etl-handlelines'
-
-const linehandler = (lineObj) => {
-    // return null to remove this line
-    if (!lineObj.record || lineObj.record["TestValue"] == 'illegalValue') {return null}
-    
-    // optionally make changes to lineObj
-    lineObj.record["NewProperty"] = "asdf"
-
-    // return the changed lineObj
-    return lineObj
-}
+let gulp = require('gulp')
+import {runXml2js} from '../src/plugin'
 
 exports.default = function() {
-    return src('data/*.ndjson')
-    // pipe the files through our handlelines plugin
-    .pipe(handlelines({}, { transformCallback: linehandler }))
-    .pipe(dest('output/'));
-}
+    return src('data/*.json')
+    // pipe the files through our json2xml plugin
+    .pipe(runXml2js())
+    .pipe(gulp.dest('../testdata/processed'));
+    };
 ```
-### Model Plugin
-This plugin is intended to be a model **gulp-etl** plugin, usable as a template to be forked to create new plugins for other uses. It is compliant with [best practices for gulp plugins](https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/guidelines.md#what-does-a-good-plugin-look-like), and it properly handles both [buffers](https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/using-buffers.md) and [streams](https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/dealing-with-streams.md).
-
-
-
-### Quick Start
-* Dependencies: 
-    * [git](https://git-scm.com/downloads)
-    * [nodejs](https://nodejs.org/en/download/releases/) - At least v6.3 (6.9 for Windows) required for TypeScript debugging
-    * npm (installs with Node)
-    * typescript - installed as a development dependency
-* Clone this repo and run `npm install` to install npm packages
-* Debug: with [VScode](https://code.visualstudio.com/download) use `Open Folder` to open the project folder, then hit F5 to debug. This runs without compiling to javascript using [ts-node](https://www.npmjs.com/package/ts-node)
-* Test: `npm test` or `npm t`
-* Compile to javascript: `npm run build`
 
 ### Testing
 

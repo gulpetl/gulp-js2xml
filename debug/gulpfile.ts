@@ -1,7 +1,7 @@
 let gulp = require('gulp')
 import {runXml2js} from '../src/plugin'
 import * as loglevel from 'loglevel'
-import { strict } from 'assert';
+//import { strict } from 'assert';
 const log = loglevel.getLogger('gulpfile')
 log.setLevel((process.env.DEBUG_LEVEL || 'warn') as log.LogLevelDesc)
 
@@ -11,7 +11,7 @@ const PLUGIN_NAME = module.exports.name;
 //the plugin will be called here
     export function xml () {
       gulp.src('../testdata/*.json')
-        .pipe(runXml2js())
+        .pipe(runXml2js({compact: true, ignoreDeclaration: true, spaces: 4}))
         .pipe(gulp.dest('../testdata/processed'));
     };
     
