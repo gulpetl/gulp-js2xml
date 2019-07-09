@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <root>
-  <section>
-    <title>First</title>
-    <content>Data: buffer</content>
-  </section>
-  <section>
-    <title>Second</title>
-    <content>Data: string</content>
-  </section>
+    <section>
+        <title>First</title>
+        <content>Data: buffer</content>
+    </section>
+    <section>
+        <title>Second</title>
+        <content>Data: string</content>
+    </section>
 </root>
