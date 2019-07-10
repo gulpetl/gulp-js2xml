@@ -1,6 +1,5 @@
 var map = require('map-stream');
 var rext = require('replace-ext');
-var fs = require('fs');
 import Vinyl = require('vinyl')
 import PluginError = require('plugin-error');
 const PLUGIN_NAME = module.exports.name;
@@ -11,17 +10,15 @@ export function runXml2js(configObj?: any) {
 
   function modifyContents(file: Vinyl, cb:Function) {
     if (file.isNull()) return cb(null, file); 
-    if (file.isStream()) return cb(new Error("gulp-xml2js: Streaming not supported")); // pass error if streaming is not supported
+    if (file.isStream()) return cb(new PluginError(PLUGIN_NAME, "Streaming not supported")); // pass error if streaming is not supported
     let returnErr: any = null
 
     //Will parse the JSON into XML if the file is in
     if (file.isBuffer()){
-      //Takes the contents of JSON file as a buffer
       let fileBuf : Buffer = (file.contents as Buffer)
       let xmlResult:any
       let JSONData:any
         try {
-          //Converts the file into utf8 string notation of a java script object
           JSONData = fileBuf.toString('utf8')
           xmlResult = convert.json2xml(JSONData, configObj);
           

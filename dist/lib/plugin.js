@@ -2,28 +2,25 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var map = require('map-stream');
 var rext = require('replace-ext');
-var fs = require('fs'), xml2js = require('xml2js');
 const PluginError = require("plugin-error");
 const PLUGIN_NAME = module.exports.name;
-function runXml2js(options) {
-    var options = options ? options : {};
+var convert = require('xml-js');
+function runXml2js(configObj) {
+    var configObj = configObj ? configObj : {};
     function modifyContents(file, cb) {
         if (file.isNull())
             return cb(null, file);
         if (file.isStream())
-            return cb(new Error("gulp-xml2js: Streaming not supported")); // pass error if streaming is not supported
+            return cb(new PluginError(PLUGIN_NAME, "Streaming not supported")); // pass error if streaming is not supported
         let returnErr = null;
+        //Will parse the JSON into XML if the file is in
         if (file.isBuffer()) {
             let fileBuf = file.contents;
-            let resultHolder;
-            let lineObj;
             let xmlResult;
-            var builder = new xml2js.Builder();
+            let JSONData;
             try {
-                resultHolder = fileBuf.toString('utf8');
-                lineObj = JSON.parse(resultHolder);
-                xmlResult = builder.buildObject(lineObj);
-                var obj = { name: "Super", Surname: "Man", age: 23 };
+                JSONData = fileBuf.toString('utf8');
+                xmlResult = convert.json2xml(JSONData, configObj);
             }
             catch (err) {
                 returnErr = new PluginError(PLUGIN_NAME, err);
