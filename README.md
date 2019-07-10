@@ -53,7 +53,7 @@ https://github.com/nashwaan/xml-js#compact-vs-non-compact
 A sample configObj passed during the call for the json2xml plugin in the gulp file
 ```
 var sampleConfigObj = {compact: true, ignoreDeclaration: true, spaces: 4}; // sample configObj
-.pipe(runXml2js({compact: true, ignoreDeclaration: true, spaces: 4}))
+.pipe(runXml2js(sampleConfigObj))
 ```
 
 The configObj in this situation is used for users to enter in options that the user can enter inorder to customize the resultant xml file. The table containing the options can be found in the following link 
