@@ -1,1 +1,1 @@
-export declare function runXml2js(configObj?: any): any;
+export declare function json2xml(configObj?: any): any;
