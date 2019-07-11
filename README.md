@@ -60,13 +60,13 @@ The configObj in this situation is used for users to enter in options that the u
 ##### Sample gulpfile.js
 ```
 let gulp = require('gulp')
-import {runXml2js} from '../src/plugin'
+import {jsontoxml} from 'gulp-jsontoxml'
 var sampleConfigObj = {compact: true, ignoreDeclaration: true, spaces: 4}; // sample configObj
 
 exports.default = function() {
     return src('data/*.json')
     // pipe the files through our jsontoxml plugin
-    .pipe(runXml2js(sampleConfigObj))
+    .pipe(jsontoxml(sampleConfigObj))
     .pipe(gulp.dest('../testdata/processed'));
     };
 ```
