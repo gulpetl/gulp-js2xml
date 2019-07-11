@@ -1,23 +1,9 @@
 # gulp-json2xml #
-This plugin is a wrapper for npm package 'xml-js'. To learn about 'xml-js', refer to the following link
-https://www.npmjs.com/package/xml-js
+This plugin is a wrapper for npm package ['xml-js'](https://www.npmjs.com/package/xml-js)
 
 The goal of this plugin is to take a JSON file and convert it to XML. The JSON files are passed through gulp.src in the gulpfile.
-A sample JSON looks like 
-```
-{"root":{"section":[{"title":["First"],"content":["Data: buffer"]},{"title":["Second"],"content":["Data: string"]}]}}
-```
-The plugin currently works on buffer mode only.
 
-# Compact vs Non Compact #
-This plugin takes in both compact and non compact JSON files and the user can specify whether or not the file is in compact format by setting 'compact:true' or 'compact:false' in the options parameter. A sample image comparing compact and non compact JSON can be found in the link
-https://github.com/nashwaan/xml-js/blob/master/artwork/synopsis.svg
-
-A sample compact JSON would look like
-```
-{"root":{"section":[{"title":["First"],"content":["Data: buffer"]},{"title":["Second"],"content":["Data: string"]}]}}   
-```
-While a non compact version of the same JSON would look like 
+A sample JSON may look something like
 ```
 {  
    "root":{  
@@ -43,21 +29,32 @@ While a non compact version of the same JSON would look like
 }
 ```
 
-To learn more about the difference between Compact and Non Compact JSON refer to the following link
-https://github.com/nashwaan/xml-js#compact-vs-non-compact
+and if passed in to this plugin will return the following xml
+```
+<root>
+    <section>
+        <title>First</title>
+        <content>Data: buffer</content>
+    </section>
+    <section>
+        <title>Second</title>
+        <content>Data: string</content>
+    </section>
+</root>
+```
+
+# Compact vs Non Compact #
+This plugin takes in both [compact](https://github.com/nashwaan/xml-js#compact-vs-non-compact) and [non-compact](https://github.com/nashwaan/xml-js#compact-vs-non-compact) JSON files and the user can specify whether or not the file is in compact format by setting 'compact:true' or 'compact:false' in the options parameter. 
+
+A sample compact and non compact JSON comparison can be found [here](https://github.com/nashwaan/xml-js#compact-vs-non-compact)
+
 
 
 ### Usage
 **gulp-json2xml** plugin accepts a configObj as its parameter. The configObj will contain any info the plugin needs.
 
-A sample configObj passed during the call for the json2xml plugin in the gulp file
-```
-var sampleConfigObj = {compact: true, ignoreDeclaration: true, spaces: 4}; // sample configObj
-.pipe(runXml2js(sampleConfigObj))
-```
 
-The configObj in this situation is used for users to enter in options that the user can enter inorder to customize the resultant xml file. The table containing the options can be found in the following link 
-https://github.com/nashwaan/xml-js#options-for-converting-js-object--json--xml
+The configObj in this situation is used for users to enter in options that the user can enter inorder to customize the resultant xml file. The table containing the options can be found [here](https://github.com/nashwaan/xml-js#options-for-converting-js-object--json--xml)
 
 
 ##### Sample gulpfile.js
