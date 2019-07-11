@@ -1,68 +1,75 @@
 # gulp-json2xml #
+This plugin is a wrapper for npm package ['xml-js'](https://www.npmjs.com/package/xml-js)
 
-*gulp-json2xml is being created from **[gulp-etl-handlelines](https://github.com/gulpetl/gulp-etl-handlelines)** and [gulp-xml2js](https://github.com/stevelacy/gulp-xml2js). The original **gulp-etl-handlelines** readme is below.
+The goal of this plugin is to take a JSON file and convert it to XML. The JSON files are passed through gulp.src in the gulpfile.
 
-Utility function providing a "handleline" callback which is called for every record in a **gulp-etl** **Message Stream**. This very powerful functionality can be used for filtering, transformations, counters, etc. and is a nice way to add functionality without building a full module. It also powers a number of our other modules, greatly simplifying their development by handling the "boilerplate" code needed for a module. Works in both buffer and streaming mode.
-
-This is a **[gulp-etl](https://gulpetl.com/)** plugin, and as such it is a [gulp](https://gulpjs.com/) plugin. **data-etl** plugins processes [ndjson](http://ndjson.org/) data streams/files which we call **Message Streams** and which are compliant with the [Singer specification](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#output). Message Streams look like this:
-
+A sample JSON may look something like
 ```
-{"type": "SCHEMA", "stream": "users", "key_properties": ["id"], "schema": {"required": ["id"], "type": "object", "properties": {"id": {"type": "integer"}}}}
-{"type": "RECORD", "stream": "users", "record": {"id": 1, "name": "Chris"}}
-{"type": "RECORD", "stream": "users", "record": {"id": 2, "name": "Mike"}}
-{"type": "SCHEMA", "stream": "locations", "key_properties": ["id"], "schema": {"required": ["id"], "type": "object", "properties": {"id": {"type": "integer"}}}}
-{"type": "RECORD", "stream": "locations", "record": {"id": 1, "name": "Philadelphia"}}
-{"type": "STATE", "value": {"users": 2, "locations": 1}}
-```
-
-### Usage
-**data-etl** plugins accept a configObj as its first parameter. The configObj
-will contain any info the plugin needs.
-
-In addition, this plugin also accepts a TransformCallback function. That function will receive a 
-Singer message object (a [RECORD](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#record-message), [SCHEMA](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#schema-message) or [STATE](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message)) and is expected to return either the Singer message object (whether transformed or unchanged) to be passed downstream, or ```null``` to remove the message from the stream).
-
-This plugin also accepts a FinishCallback and StartCallback, which are functions that are executed before and after the TransformCallback. The FinishCallback can be used to manage data stored collected from the stream. 
-
-Send in callbacks as a second parameter in the form: 
-
-```
-{
-    transformCallback: tranformFunction,
-    finishCallback: finishFunction,
-    startCallback: startFunction
+{  
+   "root":{  
+      "section":[  
+         {  
+            "title":[  
+               "First"
+            ],
+            "content":[  
+               "Data: buffer"
+            ]
+         },
+         {  
+            "title":[  
+               "Second"
+            ],
+            "content":[  
+               "Data: string"
+            ]
+         }
+      ]
+   }
 }
 ```
+
+and if passed in to this plugin will return the following xml
+```
+<root>
+    <section>
+        <title>First</title>
+        <content>Data: buffer</content>
+    </section>
+    <section>
+        <title>Second</title>
+        <content>Data: string</content>
+    </section>
+</root>
+```
+The package `gulp-xmltojson` that converts xml files back to JSON is coming soon.
+# Compact vs Non Compact #
+This plugin takes in both [compact](https://github.com/nashwaan/xml-js#compact-vs-non-compact) and [non-compact](https://github.com/nashwaan/xml-js#compact-vs-non-compact) JSON files and the user can specify whether or not the file is in compact format by setting 'compact:true' or 'compact:false' in the options parameter. 
+
+A sample compact and non compact JSON comparison can be found [here](https://github.com/nashwaan/xml-js#compact-vs-non-compact)
+
+
+
+### Usage
+**gulp-json2xml** plugin accepts a configObj as its parameter. The configObj will contain any info the plugin needs.
+
+
+The configObj in this situation is used for users to enter in options that the user can enter inorder to customize the resultant xml file. The table containing the options can be found [here](https://github.com/nashwaan/xml-js#options-for-converting-js-object--json--xml)
+
 
 ##### Sample gulpfile.js
 ```
-var handleLines = require('gulp-etl-handlelines').handlelines
-// for TypeScript use this line instead:
-// import { handlinelines } from 'gulp-etl-handlelines'
-
-const linehandler = (lineObj) => {
-    // return null to remove this line
-    if (!lineObj.record || lineObj.record["TestValue"] == 'illegalValue') {return null}
-    
-    // optionally make changes to lineObj
-    lineObj.record["NewProperty"] = "asdf"
-
-    // return the changed lineObj
-    return lineObj
-}
+let gulp = require('gulp')
+import {runXml2js} from '../src/plugin'
+var sampleConfigObj = {compact: true, ignoreDeclaration: true, spaces: 4}; // sample configObj
 
 exports.default = function() {
-    return src('data/*.ndjson')
-    // pipe the files through our handlelines plugin
-    .pipe(handlelines({}, { transformCallback: linehandler }))
-    .pipe(dest('output/'));
-}
+    return src('data/*.json')
+    // pipe the files through our json2xml plugin
+    .pipe(runXml2js(sampleConfigObj))
+    .pipe(gulp.dest('../testdata/processed'));
+    };
 ```
-### Model Plugin
-This plugin is intended to be a model **gulp-etl** plugin, usable as a template to be forked to create new plugins for other uses. It is compliant with [best practices for gulp plugins](https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/guidelines.md#what-does-a-good-plugin-look-like), and it properly handles both [buffers](https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/using-buffers.md) and [streams](https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/dealing-with-streams.md).
-
-
-
 ### Quick Start
 * Dependencies: 
     * [git](https://git-scm.com/downloads)
