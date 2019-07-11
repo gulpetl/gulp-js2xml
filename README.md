@@ -1,4 +1,4 @@
-# gulp-json2xml #
+# gulp-jsontoxml #
 This plugin is a wrapper for npm package ['xml-js'](https://www.npmjs.com/package/xml-js)
 
 The goal of this plugin is to take a JSON file and convert it to XML. The JSON files are passed through gulp.src in the gulpfile.
@@ -51,7 +51,7 @@ A sample compact and non compact JSON comparison can be found [here](https://git
 
 
 ### Usage
-**gulp-json2xml** plugin accepts a configObj as its parameter. The configObj will contain any info the plugin needs.
+**gulp-jsontoxml** plugin accepts a configObj as its parameter. The configObj will contain any info the plugin needs.
 
 
 The configObj in this situation is used for users to enter in options that the user can enter inorder to customize the resultant xml file. The table containing the options can be found [here](https://github.com/nashwaan/xml-js#options-for-converting-js-object--json--xml)
@@ -65,7 +65,7 @@ var sampleConfigObj = {compact: true, ignoreDeclaration: true, spaces: 4}; // sa
 
 exports.default = function() {
     return src('data/*.json')
-    // pipe the files through our json2xml plugin
+    // pipe the files through our jsontoxml plugin
     .pipe(runXml2js(sampleConfigObj))
     .pipe(gulp.dest('../testdata/processed'));
     };

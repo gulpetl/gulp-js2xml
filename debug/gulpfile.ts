@@ -3,7 +3,7 @@ import {jsontoxml} from '../src/plugin'
 import * as loglevel from 'loglevel'
 //import { strict } from 'assert';
 const log = loglevel.getLogger('gulpfile')
-log.setLevel((process.env.DEBUG_LEVEL || 'warn') as log.LogLevelDesc)
+log.setLevel((process.env.DEBUG_LEVEL || 'warn') as loglevel.LogLevelDesc)
 var options = {compact: true, ignoreDeclaration: true, spaces: 4};
 const pkginfo = require('pkginfo')(module); // project package.json info into module.exports
 const PLUGIN_NAME = module.exports.name;
