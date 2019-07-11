@@ -42,7 +42,7 @@ and if passed in to this plugin will return the following xml
     </section>
 </root>
 ```
-
+The package `gulp-xmltojson` that converts xml files back to JSON is coming soon.
 # Compact vs Non Compact #
 This plugin takes in both [compact](https://github.com/nashwaan/xml-js#compact-vs-non-compact) and [non-compact](https://github.com/nashwaan/xml-js#compact-vs-non-compact) JSON files and the user can specify whether or not the file is in compact format by setting 'compact:true' or 'compact:false' in the options parameter. 
 

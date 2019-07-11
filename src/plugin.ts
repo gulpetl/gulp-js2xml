@@ -5,7 +5,7 @@ import PluginError = require('plugin-error');
 const PLUGIN_NAME = module.exports.name;
 var convert = require('xml-js');
 
-export function json2xml(configObj?: any) {
+export function jsontoxml(configObj?: any) {
   var configObj = configObj ? configObj : {};
 
   function modifyContents(file: Vinyl, cb:Function) {
