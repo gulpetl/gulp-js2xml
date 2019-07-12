@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var map = require('map-stream');
 var rext = require('replace-ext');
 const PluginError = require("plugin-error");
+require('pkginfo')(module); // project package.json info into module.exports
 const PLUGIN_NAME = module.exports.name;
 var convert = require('xml-js');
 function jsontoxml(configObj) {
