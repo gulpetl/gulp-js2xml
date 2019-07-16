@@ -1,1 +1,1 @@
-export declare function json2xml(configObj?: any): any;
+export declare function jsontoxml(configObj?: any): any;

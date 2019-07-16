@@ -5,7 +5,7 @@ var rext = require('replace-ext');
 const PluginError = require("plugin-error");
 const PLUGIN_NAME = module.exports.name;
 var convert = require('xml-js');
-function json2xml(configObj) {
+function jsontoxml(configObj) {
     var configObj = configObj ? configObj : {};
     function modifyContents(file, cb) {
         if (file.isNull())
@@ -32,6 +32,6 @@ function json2xml(configObj) {
     }
     return map(modifyContents);
 }
-exports.json2xml = json2xml;
+exports.jsontoxml = jsontoxml;
 ;
 //# sourceMappingURL=plugin.js.map
